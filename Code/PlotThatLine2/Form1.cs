@@ -44,10 +44,7 @@ namespace PlotThatLine2
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
 
-        }
 
         public void cityBox_TextChanged(object sender, EventArgs e)
         {
@@ -55,6 +52,11 @@ namespace PlotThatLine2
         }
 
         private void Graph1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }
