@@ -20,7 +20,7 @@ namespace PlotThatLine2
             this.latitude = latitude;
             this.longitude = longitutude;
 
-
+            
         }
     }
 }
