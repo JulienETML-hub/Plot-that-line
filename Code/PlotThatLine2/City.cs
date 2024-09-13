@@ -8,10 +8,12 @@ namespace PlotThatLine2
 {
     public class City
     {
-        public string name;
-        public string country;
-        public double latitude;
-        public double longitude;
+        DateTime[] time;
+        double[] temperature;
+        string name;
+        string country;
+        double latitude;
+        double longitude;
 
         public City(string name, string country, double latitude, double longitutude)
         {
@@ -22,5 +24,13 @@ namespace PlotThatLine2
 
             
         }
+        public DateTime[] Time { get; set; }
+        public double[] Temperature { get; set; }
+        public string Name { get; set; }
+        public string Country { get; set; } 
+        public double Latitude { get { return latitude;} }
+        public double Longitude { get { return longitude;} }
+
+        public DateTime[] Time1 { get => time; set => time = value; }
     }
 }
