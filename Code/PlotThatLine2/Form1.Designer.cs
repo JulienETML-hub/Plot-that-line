@@ -34,7 +34,7 @@
             // 
             // cityBox
             // 
-            cityBox.Location = new Point(277, 151);
+            cityBox.Location = new Point(80, 12);
             cityBox.Name = "cityBox";
             cityBox.Size = new Size(100, 23);
             cityBox.TabIndex = 0;
@@ -43,7 +43,7 @@
             // Graph1
             // 
             Graph1.DisplayScale = 1F;
-            Graph1.Location = new Point(277, 180);
+            Graph1.Location = new Point(40, 41);
             Graph1.Name = "Graph1";
             Graph1.Size = new Size(150, 150);
             Graph1.TabIndex = 1;
