@@ -24,18 +24,28 @@ namespace PlotThatLine2
             LoadData();
         }
 
+        static string CustomFormatter(double temperature)
+        {
+
+                return $"{temperature}°";
+
+        }
+        ScottPlot.TickGenerators.NumericAutomatic myTickGenerator = new()
+        {
+            LabelFormatter = CustomFormatter
+        };
         private async void LoadData()
         {
-            string apiUrl = $"https://archive-api.open-meteo.com/v1/archive?latitude={Lausanne.Latitude}&longitude={Lausanne.Longitude}&start_date=2020-01-01&end_date=2024-01-01&daily=temperature_2m_max";
+            string apiUrlAlaska = $"https://archive-api.open-meteo.com/v1/archive?latitude=61.16&longitude=-153.632&start_date=2024-04-01&end_date=2024-06-30&daily=temperature_2m_max";
+            string apiUrl = $"https://archive-api.open-meteo.com/v1/archive?latitude={Lausanne.Latitude}&longitude={Lausanne.Longitude}&start_date=2004-03-01&end_date=2004-03-27&daily=temperature_2m_max";
 
             try
             {
                 HttpResponseMessage response = await client.GetAsync(apiUrl);
-                response.EnsureSuccessStatusCode();
+                //response.EnsureSuccessStatusCode();
 
                 string responseBody = await response.Content.ReadAsStringAsync();
-               // string[] test = responseBody.Split(',');
-              //  var test2 = test.Select(x => x.Contains("T12:00")).ToList();
+
                JObject json = JObject.Parse(Convert.ToString(responseBody));
 
                 // Extraction des données
@@ -47,18 +57,21 @@ namespace PlotThatLine2
                 Lausanne.Temperature = temperatures;
 
 
-                // Exemple de graphique avec ScottPlot
                 if (Lausanne.Time.Length > 0 && Lausanne.Temperature.Length > 0)
                 {
-                    double[] x = { 1.5, 2.8, 4.1, 5.6, 7.2, 8.9, 10.3, 12.4, 14.6, 16.1 };
-                    double[] y = { 1.9, 3.2, 5.7, 6.8, 8.4, 10.2, 12.6, 14.3, 16.7, 19.0 };
+                    ScottPlot.AxisPanels.Experimental.LeftAxisWithSubtitle customAxisY = new()
+                    {
+                        LabelText = "Température en degrée",
+                    };
+                    customAxisY.FrameLineStyle.IsVisible = false;
                     Graph1.Width = 500;
                     Graph1.Height = 400;
+                    Graph1.Plot.Axes.Left.TickGenerator = myTickGenerator;
                     Graph1.Plot.Add.ScatterLine(Lausanne.Time,Lausanne.Temperature);
                     Graph1.Plot.Axes.DateTimeTicksBottom();
                     Graph1.Plot.Axes.SetLimitsY(Lausanne.Temperature.Min(), Lausanne.Temperature.Max());
+                    Graph1.Plot.Axes.AddLeftAxis(customAxisY);
 
-                    Graph1.Plot.ShowGrid();
                 }
             }
             catch (HttpRequestException e)
