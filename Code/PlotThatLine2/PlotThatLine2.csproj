@@ -15,4 +15,8 @@
     <PackageReference Include="ScottPlot.WPF" Version="5.0.38" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\DataSources\" />
+  </ItemGroup>
+
 </Project>
