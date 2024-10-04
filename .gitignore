@@ -425,3 +425,8 @@ Code/PlotThatLine2/obj/Debug/net8.0-windows/PlotThatLine2.AssemblyInfo.cs
 *.cache
 *.csproj
 *.user
+*.vsidx
+*.vsidx
+/Code/PlotThatLine
+/Code/PlotThatLine
+*.vsidx
