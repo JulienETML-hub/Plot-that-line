@@ -9,15 +9,15 @@ namespace PlotThatLine2
 {
     public class City
     {
-        DateTime[] time;
+        DateTime[]? time;
         double[] temperature;
         string name;
         string country;
-        double latitude;
-        double longitude;
-        public double Latitude { get { return latitude; } }
-        public double Longitude { get { return longitude; } }
-        public DateTime[] Time { get => time; set => time = value; }
+        double? latitude;
+        double? longitude;
+        public double? Latitude { get { return latitude; } }
+        public double? Longitude { get { return longitude; } }
+        public DateTime[]? Time { get => time; set => time = value; }
         public string Name { get => name; set => name = value; }
         public string Country { get => country; set => country = value; }
         public double[] Temperature { get => temperature; set => temperature = value; }
@@ -28,7 +28,7 @@ namespace PlotThatLine2
         /// <param name="country"></param>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
-        public City(string name, string country, double latitude, double longitude)
+        public City(string name, string country, double? latitude, double? longitude)
         {
             this.name = name;
             this.country = country;
@@ -50,9 +50,12 @@ namespace PlotThatLine2
             };
 
             // Ajout des données journalières de température dans l'objet cityData
-            for (int i = 0; i < this.time.Length; i++)
+            if (this.time != null)
             {
-                cityData.Data.Add(new { Date = this.time[i], Temperature = this.temperature[i] });
+                for (int i = 0; i <= this.time.Length; i++)
+                {
+                    cityData.Data.Add(new { Date = this.time[i], Temperature = this.temperature[i] });
+                }
             }
 
             // Conversion de l'objet en JSON
