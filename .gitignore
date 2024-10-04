@@ -419,3 +419,9 @@ Code/PlotThatLine2/PlotThatLine2.csproj
 /Code/PlotThatLine2/obj/Debug
 /Code/PlotThatLine2/obj/Debug/net8.0-windows
 /Code/PlotThatLine2/datasets
+*.v2
+Code/PlotThatLine2/Form1.Designer.cs
+Code/PlotThatLine2/obj/Debug/net8.0-windows/PlotThatLine2.AssemblyInfo.cs
+*.cache
+*.csproj
+*.user
