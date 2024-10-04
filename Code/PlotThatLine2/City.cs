@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PlotThatLine2
@@ -14,23 +15,56 @@ namespace PlotThatLine2
         string country;
         double latitude;
         double longitude;
-
-        public City(string name, string country, double latitude, double longitutude)
+        public double Latitude { get { return latitude; } }
+        public double Longitude { get { return longitude; } }
+        public DateTime[] Time { get => time; set => time = value; }
+        public string Name { get => name; set => name = value; }
+        public string Country { get => country; set => country = value; }
+        public double[] Temperature { get => temperature; set => temperature = value; }
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="country"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        public City(string name, string country, double latitude, double longitude)
         {
             this.name = name;
             this.country = country;
             this.latitude = latitude;
-            this.longitude = longitutude;
+            this.longitude = longitude;
 
             
         }
-        public DateTime[] Time { get; set; }
-        public double[] Temperature { get; set; }
-        public string Name { get; set; }
-        public string Country { get; set; } 
-        public double Latitude { get { return latitude;} }
-        public double Longitude { get { return longitude;} }
 
-        public DateTime[] Time1 { get => time; set => time = value; }
+        public async Task CreateJsonFileAsync()
+        {
+            var cityData = new
+            {
+                Name = this.name,
+                Country = this.country,
+                Latitude = this.latitude,
+                Longitude = this.longitude,
+                Data = new List<object>()
+            };
+
+            // Ajout des données journalières de température dans l'objet cityData
+            for (int i = 0; i < this.time.Length; i++)
+            {
+                cityData.Data.Add(new { Date = this.time[i], Temperature = this.temperature[i] });
+            }
+
+            // Conversion de l'objet en JSON
+            string jsonString = JsonSerializer.Serialize(cityData, new JsonSerializerOptions { WriteIndented = true });
+
+            // Définition du nom du fichier JSON
+            string fileName = $"{this.name}_weather_data.json";
+
+            // Écriture du fichier JSON
+            await File.WriteAllTextAsync($"../../../datasets/{fileName}", jsonString);
+
+            Console.WriteLine($"Le fichier JSON '{fileName}' a été créé avec succès !");
+        }
     }
 }
