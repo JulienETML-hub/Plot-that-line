@@ -77,6 +77,10 @@ StyleCopReport.xml
 *.obj
 *.iobj
 *.pch
+*.AssemblyInfo.cs
+*.cache
+*.csproj
+*.csproj.cs
 *.pdb
 *.ipdb
 *.pgc
@@ -84,8 +88,13 @@ StyleCopReport.xml
 *.rsp
 *.sbr
 *.tlb
+*.AssemblyInfo.cs
 *.tli
 *.tlh
+*.dtbcache.v2
+*.assemblyInfoInputs.cache
+*.cache
+*.csproj
 *.tmp
 *.tmp_proj
 *_wpftmp.csproj
@@ -93,6 +102,8 @@ StyleCopReport.xml
 *.tlog
 *.vspscc
 *.vssscc
+*.resx
+*.csproj
 .builds
 *.pidb
 *.svclog
@@ -397,3 +408,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+Code/PlotThatLine2/obj/Debug/net8.0-windows/PlotThatLine2.AssemblyInfo.cs
+Code/PlotThatLine2/obj/Debug/net8.0-windows/PlotThatLine2.AssemblyInfoInputs.cache
