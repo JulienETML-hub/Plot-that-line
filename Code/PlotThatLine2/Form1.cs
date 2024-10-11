@@ -95,10 +95,12 @@ namespace PlotThatLine2
 
         private void UpdateCheckedListBox()
         {
-            checkedListBox1.Items.Clear();
             foreach (City city in Cities)
             {
-                checkedListBox1.Items.Add(city.Name);
+                if (!checkedListBox1.Items.Contains(city.Name)) // Vérifie si le nom n'est pas déjà présent
+                {
+                    checkedListBox1.Items.Add(city.Name); // Ajoute le nom s'il n'est pas dans la liste
+                }
             }
         }
 
@@ -117,17 +119,18 @@ namespace PlotThatLine2
         {
             Cities.Add(newCity);  // Ajoute la nouvelle ville à la liste
             MessageBox.Show($"La ville {newCity.Name} a été ajoutée !");
-            UpdateCheckedListBox();  // Rafraîchit la liste des villes affichées
+            refresh();
         }
-
-        private void refresh_Click(object sender, EventArgs e)
+        private void refresh()
         {
-            checkedListBox1.Enabled = true;
             UpdateCheckedListBox();  // Rafraîchit la liste des villes affichées
             foreach (City city in Cities)
             {
                 city.CreateJsonFileAsync();  // Appelle la méthode d'exportation JSON
             }
+        }
+        private void refresh_Click(object sender, EventArgs e)
+        {
         }
 
         private void dateTimePickerDebut_ValueChanged(object sender, EventArgs e)
@@ -140,6 +143,7 @@ namespace PlotThatLine2
 
         private void Search_Click(object sender, EventArgs e)
         {
+            refresh();
             DateTime timeStart = dateTimePickerDebut.Value;
             DateTime timeEnd = dateTimePickerFin.Value;
 
