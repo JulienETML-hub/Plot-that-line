@@ -10,7 +10,7 @@ namespace PlotThatLine2
     public class City
     {
         DateTime[]? time;
-        double[] temperature;
+        double[]? temperature;
         string name;
         string country;
         double? latitude;
@@ -28,14 +28,14 @@ namespace PlotThatLine2
         /// <param name="country"></param>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
-        public City(string name, string country, double? latitude, double? longitude)
+        public City(string name, string country, double? latitude, double? longitude, DateTime[]? time, double[]? temperature)
         {
             this.name = name;
             this.country = country;
             this.latitude = latitude;
             this.longitude = longitude;
-
-            
+            this.time = time;
+            this.temperature = temperature;
         }
 
 
@@ -48,6 +48,8 @@ namespace PlotThatLine2
                 Country = this.country,
                 Latitude = this.latitude,
                 Longitude = this.longitude,
+                Temperature = this.temperature,
+                Time = this.time,
                 Data = new List<object>()
             };
 
