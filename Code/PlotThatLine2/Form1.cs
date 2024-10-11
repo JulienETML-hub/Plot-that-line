@@ -7,7 +7,8 @@ using ScottPlot;
 using System.Linq;
 using ScottPlot.WinForms;
 using System.Collections.Generic;
-
+using System.Text.Json;
+using System.Threading.Tasks;
 namespace PlotThatLine2
 {
     public partial class Form1 : Form
@@ -15,7 +16,8 @@ namespace PlotThatLine2
         private static readonly HttpClient client = new HttpClient();
 
         private List<City> _cities;  // Utilise un champ privé
-
+        
+        
         public List<City> Cities
         {
             get => _cities;  // Retourne le champ privé
@@ -25,10 +27,46 @@ namespace PlotThatLine2
         public Form1()
         {
             InitializeComponent();
-            City Lausanne = new City("Lausanne", "Swiss", 46.519, 6.632);
-            City Geneve = new City("Genève", "Swiss", 46.2205, 6.132);
-            Cities = new List<City> { Lausanne, Geneve };  // Initialise la liste ici
+            Cities = new List<City> {};  // Initialise la liste ici
+            LoadCitiesFromJsonWithoutNullablePropertiesAsync("../../../datasets/");
             Graph1.Refresh();
+        }
+        public async Task LoadCitiesFromJsonWithoutNullablePropertiesAsync(string folderPath)
+        {
+
+            // Récupérer tous les fichiers JSON dans le dossier
+            string[] jsonFiles = Directory.GetFiles(folderPath, "*.json");
+
+            foreach (string file in jsonFiles)
+            {
+                try
+                {
+                    // Lire le contenu du fichier JSON
+                    string jsonContent = await File.ReadAllTextAsync(file);
+
+                    // Désérialiser en utilisant un modèle réduit sans les propriétés non souhaitées
+                    var city = JsonSerializer.Deserialize<City>(jsonContent);
+
+                    if (city != null)
+                    {
+                        // Convertir l'objet en City tout en ignorant time et temperature
+                        City cityComplete = new City
+                        (
+                            city.Name,
+                            city.Country,
+                            city.Latitude,
+                            city.Longitude
+                        );
+
+                        Cities.Add(cityComplete);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erreur lors de la lecture du fichier '{file}': {ex.Message}");
+                }
+            }
+
         }
 
         static string CustomFormatter(double temperature)

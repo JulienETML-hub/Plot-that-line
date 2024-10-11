@@ -38,6 +38,8 @@ namespace PlotThatLine2
             
         }
 
+
+
         public async Task CreateJsonFileAsync()
         {
             var cityData = new
@@ -65,7 +67,7 @@ namespace PlotThatLine2
             string fileName = $"{this.name}_weather_data.json";
 
             // Écriture du fichier JSON
-            await File.WriteAllTextAsync($"../../../datasets/{fileName}", jsonString);
+            await File.WriteAllTextAsync("../../../datasets/" + fileName, jsonString);
 
             Console.WriteLine($"Le fichier JSON '{fileName}' a été créé avec succès !");
         }
