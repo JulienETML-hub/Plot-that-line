@@ -9,6 +9,7 @@ using ScottPlot.WinForms;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Threading;
 namespace PlotThatLine2
 {
     public partial class Form1 : Form
@@ -47,7 +48,7 @@ namespace PlotThatLine2
                     // Désérialiser en utilisant un modèle réduit sans les propriétés non souhaitées
                     var city = JsonSerializer.Deserialize<City>(jsonContent);
 
-                    if (city != null)
+                    if (city.Name != this.Name)
                     {
                         // Convertir l'objet en City tout en ignorant time et temperature
                         City cityComplete = new City
@@ -55,7 +56,9 @@ namespace PlotThatLine2
                             city.Name,
                             city.Country,
                             city.Latitude,
-                            city.Longitude
+                            city.Longitude,
+                            city.Time,
+                            city.Temperature
                         );
 
                         Cities.Add(cityComplete);
@@ -102,6 +105,7 @@ namespace PlotThatLine2
 
                 try
                 {
+
                     HttpResponseMessage response = await client.GetAsync(apiUrl);
                     response.EnsureSuccessStatusCode();
 
@@ -123,7 +127,7 @@ namespace PlotThatLine2
                     Console.WriteLine($"Erreur lors de l'appel API : {e.Message}");
                 }
             }
-
+            refresh();
             // Rafraîchir le graphique après ajout des données
             Graph1.Refresh();
 
