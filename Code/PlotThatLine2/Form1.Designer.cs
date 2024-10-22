@@ -31,7 +31,7 @@
             Graph1 = new ScottPlot.WinForms.FormsPlot();
             checkedListBox1 = new CheckedListBox();
             addCity = new Button();
-            refresh = new Button();
+            //refresh = new Button();
             dateTimePickerDebut = new DateTimePicker();
             dateTimePickerFin = new DateTimePicker();
             Début = new Label();
@@ -68,6 +68,7 @@
             // 
             // refresh
             // 
+            /*
             refresh.Location = new Point(12, 133);
             refresh.Name = "refresh";
             refresh.Size = new Size(75, 23);
@@ -75,6 +76,7 @@
             refresh.Text = "refresh";
             refresh.UseVisualStyleBackColor = true;
             refresh.Click += refresh_Click;
+            */
             // 
             // dateTimePickerDebut
             // 
@@ -133,7 +135,7 @@
             Controls.Add(Début);
             Controls.Add(dateTimePickerFin);
             Controls.Add(dateTimePickerDebut);
-            Controls.Add(refresh);
+           //Controls.Add(refresh);
             Controls.Add(addCity);
             Controls.Add(checkedListBox1);
             Controls.Add(Graph1);
@@ -147,7 +149,7 @@
         private ScottPlot.WinForms.FormsPlot Graph1;
         private CheckedListBox checkedListBox1;
         private Button addCity;
-        private Button refresh;
+        //private Button refresh;
         private DateTimePicker dateTimePickerDebut;
         private DateTimePicker dateTimePickerFin;
         private Label Début;
