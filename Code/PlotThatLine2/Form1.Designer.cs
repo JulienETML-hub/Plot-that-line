@@ -61,9 +61,9 @@
             // 
             addCity.Location = new Point(12, 162);
             addCity.Name = "addCity";
-            addCity.Size = new Size(75, 23);
+            addCity.Size = new Size(98, 42);
             addCity.TabIndex = 3;
-            addCity.Text = "addCity";
+            addCity.Text = "Ajouter une ville";
             addCity.UseVisualStyleBackColor = true;
             addCity.Click += addCityB_Click;
             // 
@@ -106,7 +106,7 @@
             // 
             // Search
             // 
-            Search.Location = new Point(12, 191);
+            Search.Location = new Point(23, 210);
             Search.Name = "Search";
             Search.Size = new Size(75, 23);
             Search.TabIndex = 9;

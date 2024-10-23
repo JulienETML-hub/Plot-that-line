@@ -88,17 +88,12 @@ namespace PlotThatLine2
             string timeStartString = timeStart.ToString("yyyy-MM-dd");
             string timeEndString = timeEnd.ToString("yyyy-MM-dd");
 
-            ScottPlot.AxisPanels.Experimental.LeftAxisWithSubtitle customAxisY = new()
-            {
-                LabelText = "Température en degré",
-            };
-            customAxisY.FrameLineStyle.IsVisible = false;
+
             Graph1.Width = 500;
             Graph1.Height = 400;
             Graph1.Plot.Axes.Left.TickGenerator = myTickGenerator;
             Graph1.Plot.Axes.DateTimeTicksBottom();
-            Graph1.Plot.Axes.AddLeftAxis(customAxisY);
-
+            Graph1.Plot.Title("Graphique des températures");
             foreach (City city in citiesSelected)
             {
                 string apiUrl = $"https://archive-api.open-meteo.com/v1/archive?latitude={city.Latitude}&longitude={city.Longitude}&start_date={timeStartString}&end_date={timeEndString}&daily=temperature_2m_max";
