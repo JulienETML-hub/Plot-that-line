@@ -96,31 +96,67 @@ namespace PlotThatLine2
             Graph1.Plot.Title("Graphique des températures");
             foreach (City city in citiesSelected)
             {
-                string apiUrl = $"https://archive-api.open-meteo.com/v1/archive?latitude={city.Latitude}&longitude={city.Longitude}&start_date={timeStartString}&end_date={timeEndString}&daily=temperature_2m_max";
-
-                try
+                bool dataIncomplete = true;
+                if (File.Exists($"../../../datasets/{city.Name}_weather_data.json"))
                 {
+                    try
+                    {
+                        string jsonContent = await File.ReadAllTextAsync($"../../../datasets/{city.Name}_weather_data.json");
+                        var storedCity = JsonSerializer.Deserialize<City>(jsonContent);
 
-                    HttpResponseMessage response = await client.GetAsync(apiUrl);
-                    response.EnsureSuccessStatusCode();
+                        // Vérifier si les données couvrent la plage de dates demandée
+                        if (storedCity.Time != null && storedCity.Time.Length > 0)
+                        {
+                            DateTime firstAvailableDate = storedCity.Time.Min();
+                            DateTime lastAvailableDate = storedCity.Time.Max();
 
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    JObject json = JObject.Parse(responseBody);
-
-                    // Extraction des données
-                    DateTime[] times = json["daily"]["time"].ToObject<DateTime[]>();
-                    double[] temperatures = json["daily"]["temperature_2m_max"].ToObject<double[]>();
-
-                    // Stocker les données dans la propriété de City
-                    city.Time = times;
-                    city.Temperature = temperatures;
-
-                    var line = Graph1.Plot.Add.ScatterLine( city.Time, city.Temperature);
-                    line.LegendText = city.Name;
+                            // Si les données couvrent la plage de dates demandée
+                            if (firstAvailableDate <= timeStart && lastAvailableDate >= timeEnd)
+                            {
+                                // Utiliser les données locales sans appel à l'API
+                                city.Time = storedCity.Time.Where(t => t >= timeStart && t <= timeEnd).ToArray();
+                                city.Temperature = storedCity.Temperature.Skip(Array.IndexOf(storedCity.Time, city.Time.First()))
+                                                                         .Take(city.Time.Length).ToArray();
+                                dataIncomplete = false;
+                            }
+                        }
+                        var line = Graph1.Plot.Add.ScatterLine(city.Time, city.Temperature);
+                        line.LegendText = city.Name;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Erreur lors de la lecture des données locales pour {city.Name}: {ex.Message}");
+                    }
                 }
-                catch (HttpRequestException e)
+                if (dataIncomplete == true)
                 {
-                    Console.WriteLine($"Erreur lors de l'appel API : {e.Message}");
+                    string apiUrl = $"https://archive-api.open-meteo.com/v1/archive?latitude={city.Latitude}&longitude={city.Longitude}&start_date={timeStartString}&end_date={timeEndString}&daily=temperature_2m_max";
+
+                    try
+                    {
+
+                        HttpResponseMessage response = await client.GetAsync(apiUrl);
+                        response.EnsureSuccessStatusCode();
+
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        JObject json = JObject.Parse(responseBody);
+
+                        // Extraction des données
+                        DateTime[] times = json["daily"]["time"].ToObject<DateTime[]>();
+                        double[] temperatures = json["daily"]["temperature_2m_max"].ToObject<double[]>();
+
+                        // Stocker les données dans la propriété de City
+                        city.Time = times;
+                        city.Temperature = temperatures;
+                        city.StoreDataAsync();
+                        var line = Graph1.Plot.Add.ScatterLine(city.Time, city.Temperature);
+                        line.LegendText = city.Name;
+
+                    }
+                    catch (HttpRequestException e)
+                    {
+                        Console.WriteLine($"Erreur lors de l'appel API : {e.Message}");
+                    }
                 }
             }
             refresh();
@@ -159,6 +195,7 @@ namespace PlotThatLine2
         private void AddCityToList(City newCity)
         {
             Cities.Add(newCity);  // Ajoute la nouvelle ville à la liste
+            
             MessageBox.Show($"La ville {newCity.Name} a été ajoutée !");
             refresh();
         }

@@ -83,7 +83,7 @@
             dateTimePickerFin.Name = "dateTimePickerFin";
             dateTimePickerFin.Size = new Size(200, 23);
             dateTimePickerFin.TabIndex = 6;
-            dateTimePickerFin.Value = new DateTime(2024, 9, 27, 0, 0, 0, 0);
+            dateTimePickerFin.Value = new DateTime(2024, 10, 23, 0, 0, 0, 0);
             dateTimePickerFin.ValueChanged += dateTimePickerFin_ValueChanged;
             // 
             // Début
