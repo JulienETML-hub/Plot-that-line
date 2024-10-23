@@ -29,15 +29,18 @@ namespace PlotThatLine2
         {
             InitializeComponent();
             Cities = new List<City> {};  // Initialise la liste ici
+
             LoadCitiesFromJsonWithoutNullablePropertiesAsync("../../../datasets/");
+            
             Graph1.Refresh();
+
         }
         public async Task LoadCitiesFromJsonWithoutNullablePropertiesAsync(string folderPath)
         {
 
             // Récupérer tous les fichiers JSON dans le dossier
             string[] jsonFiles = Directory.GetFiles(folderPath, "*.json");
-
+            File.Create(folderPath + "tes.txt");
             foreach (string file in jsonFiles)
             {
                 try
@@ -48,25 +51,32 @@ namespace PlotThatLine2
                     // Désérialiser en utilisant un modèle réduit sans les propriétés non souhaitées
                     var city = JsonSerializer.Deserialize<City>(jsonContent);
 
-                    if (city.Name != this.Name)
-                    {
-                        // Convertir l'objet en City tout en ignorant time et temperature
-                        City cityComplete = new City
-                        (
-                            city.Name,
-                            city.Country,
-                            city.Latitude,
-                            city.Longitude,
-                            city.Time,
-                            city.Temperature
-                        );
 
-                        Cities.Add(cityComplete);
+                    if (city != null)
+                    {
+                        if (!Cities.Any(c => c.Name == city.Name))
+                        {
+                            // Convertir l'objet en City tout en ignorant time et temperature
+                            City cityComplete = new City
+                            (
+                                city.Name,
+                                city.Country,
+                                city.Latitude,
+                                city.Longitude
+                            );
+
+                            Cities.Add(cityComplete);
+
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("city = null");
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Erreur lors de la lecture du fichier '{file}': {ex.Message}");
+                    MessageBox.Show($"Erreur lors de la lecture du fichier '{file}': {ex.Message}");
                 }
             }
 
@@ -127,7 +137,7 @@ namespace PlotThatLine2
                     Console.WriteLine($"Erreur lors de l'appel API : {e.Message}");
                 }
             }
-            refresh();
+            Refresh();
             // Rafraîchir le graphique après ajout des données
             Graph1.Refresh();
 
@@ -161,9 +171,9 @@ namespace PlotThatLine2
         {
             Cities.Add(newCity);  // Ajoute la nouvelle ville à la liste
             MessageBox.Show($"La ville {newCity.Name} a été ajoutée !");
-            refresh();
+            Refresh();
         }
-        private void refresh()
+        private void Refresh()
         {
             UpdateCheckedListBox();  // Rafraîchit la liste des villes affichées
             foreach (City city in Cities)
@@ -185,7 +195,7 @@ namespace PlotThatLine2
 
         private void Search_Click(object sender, EventArgs e)
         {
-            refresh();
+            Refresh();
             DateTime timeStart = dateTimePickerDebut.Value;
             DateTime timeEnd = dateTimePickerFin.Value;
 

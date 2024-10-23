@@ -9,18 +9,21 @@ namespace PlotThatLine2
 {
     public class City
     {
-        DateTime[]? time;
-        double[]? temperature;
+
         string name;
         string country;
-        double? latitude;
-        double? longitude;
-        public double? Latitude { get { return latitude; } }
-        public double? Longitude { get { return longitude; } }
-        public DateTime[]? Time { get => time; set => time = value; }
+        double latitude;
+        double longitude;
+        DateTime[]? time;
+        double[]? temperature;
+
         public string Name { get => name; set => name = value; }
         public string Country { get => country; set => country = value; }
-        public double[] Temperature { get => temperature; set => temperature = value; }
+        public double Latitude { get => latitude; set => latitude = value; }
+        public double Longitude { get => longitude; set => longitude = value; }
+        public DateTime[]? Time { get => time; set => time = value; }
+        public double[]? Temperature { get => temperature; set => temperature = value; }
+
         /// <summary>
         /// Constructeur
         /// </summary>
@@ -28,37 +31,45 @@ namespace PlotThatLine2
         /// <param name="country"></param>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
-        public City(string name, string country, double? latitude, double? longitude, DateTime[]? time, double[]? temperature)
+        public City(string name, string country, double latitude, double longitude, DateTime[]? time, double[]? temperature)
         {
-            this.name = name;
-            this.country = country;
-            this.latitude = latitude;
-            this.longitude = longitude;
-            this.time = time;
-            this.temperature = temperature;
+            this.Name = name;
+            this.Country = country;
+            this.Latitude = latitude;
+            this.Longitude = longitude;
+            this.Time = time;
+            this.Temperature = temperature;
         }
-
-
+        public City(string name, string country, double latitude, double longitude)
+        {
+            Name = name;
+            Country = country;
+            Latitude = latitude;
+            Longitude = longitude;
+            Time = null;
+            Temperature = null;
+        }
+        public City() { }
 
         public async Task CreateJsonFileAsync()
         {
             var cityData = new
             {
-                Name = this.name,
-                Country = this.country,
-                Latitude = this.latitude,
-                Longitude = this.longitude,
-                Temperature = this.temperature,
-                Time = this.time,
+                Name = this.Name,
+                Country = this.Country,
+                Latitude = this.Latitude,
+                Longitude = this.Longitude,
+                Temperature = this.Temperature,
+                Time = this.Time,
                 Data = new List<object>()
             };
 
             // Ajout des données journalières de température dans l'objet cityData
-            if (this.time != null)
+            if (this.Time != null)
             {
-                for (int i = 0; i <= this.time.Length; i++)
+                for (int i = 0; i <= this.Time.Length; i++)
                 {
-                    cityData.Data.Add(new { Date = this.time[i], Temperature = this.temperature[i] });
+                    cityData.Data.Add(new { Date = this.Time[i], Temperature = this.Temperature[i] });
                 }
             }
 
@@ -66,7 +77,7 @@ namespace PlotThatLine2
             string jsonString = JsonSerializer.Serialize(cityData, new JsonSerializerOptions { WriteIndented = true });
 
             // Définition du nom du fichier JSON
-            string fileName = $"{this.name}_weather_data.json";
+            string fileName = $"{this.Name}_weather_data.json";
 
             // Écriture du fichier JSON
             await File.WriteAllTextAsync("../../../datasets/" + fileName, jsonString);

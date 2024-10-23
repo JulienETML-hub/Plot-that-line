@@ -430,3 +430,6 @@ Code/PlotThatLine2/obj/Debug/net8.0-windows/PlotThatLine2.AssemblyInfo.cs
 /Code/PlotThatLine
 /Code/PlotThatLine
 *.vsidx
+/Code/PlotThatLine2/obj
+/Code/PlotThatLine2/obj
+/Code/PlotThatLine2/obj/Debug/net8.0-windows
