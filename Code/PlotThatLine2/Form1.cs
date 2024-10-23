@@ -120,7 +120,8 @@ namespace PlotThatLine2
                     city.Time = times;
                     city.Temperature = temperatures;
 
-                    Graph1.Plot.Add.ScatterLine(city.Time, city.Temperature);
+                    var line = Graph1.Plot.Add.ScatterLine( city.Time, city.Temperature);
+                    line.LegendText = city.Name;
                 }
                 catch (HttpRequestException e)
                 {
@@ -144,10 +145,13 @@ namespace PlotThatLine2
                     checkedListBox1.Items.Add(city.Name); // Ajoute le nom s'il n'est pas dans la liste
                 }
             }
+           
         }
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Search_Click(sender, e);
+
         }
 
         private void addCityB_Click(object sender, EventArgs e)
@@ -177,10 +181,13 @@ namespace PlotThatLine2
 
         private void dateTimePickerDebut_ValueChanged(object sender, EventArgs e)
         {
+            Search_Click(sender, e);
         }
 
         private void dateTimePickerFin_ValueChanged(object sender, EventArgs e)
         {
+            Search_Click(sender, e);
+
         }
 
         private void Search_Click(object sender, EventArgs e)
