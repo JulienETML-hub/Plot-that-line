@@ -120,12 +120,12 @@ namespace PlotThatLine2
                                 dataIncomplete = false;
                             }
                         }
-                        var line = Graph1.Plot.Add.ScatterLine(city.Time, city.Temperature);
-                        line.LegendText = city.Name;
+                        //var line = Graph1.Plot.Add.ScatterLine(city.Time, city.Temperature);
+                        //line.LegendText = city.Name;
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Erreur lors de la lecture des données locales pour {city.Name}: {ex.Message}");
+                        MessageBox.Show($"Erreur lors de la lecture des données locales pour {city.Name}: {ex.Message}");
                     }
                 }
                 if (dataIncomplete == true)
@@ -148,9 +148,9 @@ namespace PlotThatLine2
                         // Stocker les données dans la propriété de City
                         city.Time = times;
                         city.Temperature = temperatures;
-                        city.StoreDataAsync();
-                        var line = Graph1.Plot.Add.ScatterLine(city.Time, city.Temperature);
-                        line.LegendText = city.Name;
+                        city.StoreDataAsync().Wait(1000);
+                        //var line = Graph1.Plot.Add.ScatterLine(city.Time, city.Temperature);
+                        //line.LegendText = city.Name;
 
                     }
                     catch (HttpRequestException e)
@@ -158,8 +158,10 @@ namespace PlotThatLine2
                         Console.WriteLine($"Erreur lors de l'appel API : {e.Message}");
                     }
                 }
+                var line = Graph1.Plot.Add.ScatterLine(city.Time, city.Temperature);
+                line.LegendText = city.Name;
             }
-            refresh();
+            UpdateCheckedListBox();
             // Rafraîchir le graphique après ajout des données
             Graph1.Refresh();
 

@@ -71,10 +71,12 @@
             // 
             dateTimePickerDebut.Checked = false;
             dateTimePickerDebut.Location = new Point(12, 415);
+            dateTimePickerDebut.MaxDate = new DateTime(2024, 10, 24, 0, 0, 0, 0);
+            dateTimePickerDebut.MinDate = new DateTime(1800, 1, 1, 0, 0, 0, 0);
             dateTimePickerDebut.Name = "dateTimePickerDebut";
             dateTimePickerDebut.Size = new Size(194, 23);
             dateTimePickerDebut.TabIndex = 5;
-            dateTimePickerDebut.Value = new DateTime(2024, 9, 17, 0, 0, 0, 0);
+            dateTimePickerDebut.Value = new DateTime(2024, 5, 1, 0, 0, 0, 0);
             dateTimePickerDebut.ValueChanged += dateTimePickerDebut_ValueChanged;
             // 
             // dateTimePickerFin
@@ -83,7 +85,7 @@
             dateTimePickerFin.Name = "dateTimePickerFin";
             dateTimePickerFin.Size = new Size(200, 23);
             dateTimePickerFin.TabIndex = 6;
-            dateTimePickerFin.Value = new DateTime(2024, 10, 23, 0, 0, 0, 0);
+            dateTimePickerFin.Value = new DateTime(2024, 5, 16, 0, 0, 0, 0);
             dateTimePickerFin.ValueChanged += dateTimePickerFin_ValueChanged;
             // 
             // Début
