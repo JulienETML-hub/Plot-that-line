@@ -81,19 +81,20 @@ namespace PlotThatLine2
         {
             LabelFormatter = CustomFormatter
         };
-
-        private async void LoadData(List<City> citiesSelected, DateTime timeStart, DateTime timeEnd)
+        private void GraphRefresh(DateTime timeStart, DateTime timeEnd)
         {
             Graph1.Reset();
-            string timeStartString = timeStart.ToString("yyyy-MM-dd");
-            string timeEndString = timeEnd.ToString("yyyy-MM-dd");
-
-
             Graph1.Width = 500;
             Graph1.Height = 400;
             Graph1.Plot.Axes.Left.TickGenerator = myTickGenerator;
             Graph1.Plot.Axes.DateTimeTicksBottom();
             Graph1.Plot.Title("Graphique des températures");
+        }
+        private async void LoadData(List<City> citiesSelected, DateTime timeStart, DateTime timeEnd)
+        {
+            GraphRefresh(timeStart, timeEnd);
+            string timeStartString = timeStart.ToString("yyyy-MM-dd");
+            string timeEndString = timeEnd.ToString("yyyy-MM-dd");
             foreach (City city in citiesSelected)
             {
                 bool dataIncomplete = true;
@@ -215,13 +216,13 @@ namespace PlotThatLine2
 
         private void dateTimePickerDebut_ValueChanged(object sender, EventArgs e)
         {
+
             Search_Click(sender, e);
         }
 
         private void dateTimePickerFin_ValueChanged(object sender, EventArgs e)
         {
             Search_Click(sender, e);
-
         }
 
         private void Search_Click(object sender, EventArgs e)
