@@ -97,6 +97,8 @@ namespace PlotThatLine2
             string timeEndString = timeEnd.ToString("yyyy-MM-dd");
             foreach (City city in citiesSelected)
             {
+                DateTime firstAvailableDate;
+                DateTime? lastAvailableDate = null;
                 bool dataIncomplete = true;
                 if (File.Exists($"../../../datasets/{city.Name}_weather_data.json"))
                 {
@@ -106,33 +108,35 @@ namespace PlotThatLine2
                         var storedCity = JsonSerializer.Deserialize<City>(jsonContent);
 
                         // Vérifier si les données couvrent la plage de dates demandée
-                        if (storedCity.Time != null && storedCity.Time.Length > 0)
+                        if (storedCity.Time != null && storedCity.Time.Length >= 0)
                         {
-                            DateTime firstAvailableDate = storedCity.Time.Min();
-                            DateTime lastAvailableDate = storedCity.Time.Max();
+                            firstAvailableDate = storedCity.Time.Min();
+                            lastAvailableDate = storedCity.Time.Max();
 
                             // Si les données couvrent la plage de dates demandée
-                            if (firstAvailableDate <= timeStart && lastAvailableDate >= timeEnd)
+                            if (firstAvailableDate <= timeStart && lastAvailableDate >= timeEnd )
                             {
                                 // Utiliser les données locales sans appel à l'API
-                                city.Time = storedCity.Time.Where(t => t >= timeStart && t <= timeEnd).ToArray();
-                                city.Temperature = storedCity.Temperature.Skip(Array.IndexOf(storedCity.Time, city.Time.First()))
-                                                                         .Take(city.Time.Length).ToArray();
+                                city.Time = storedCity.Time;
+                                city.Temperature = storedCity.Temperature;
+
                                 dataIncomplete = false;
                             }
                         }
-                        //var line = Graph1.Plot.Add.ScatterLine(city.Time, city.Temperature);
-                        //line.LegendText = city.Name;
                     }
                     catch (Exception ex)
                     {
+                        dataIncomplete = true;
                         MessageBox.Show($"Erreur lors de la lecture des données locales pour {city.Name}: {ex.Message}");
                     }
                 }
                 if (dataIncomplete == true)
                 {
-                    string apiUrl = $"https://archive-api.open-meteo.com/v1/archive?latitude={city.Latitude}&longitude={city.Longitude}&start_date={timeStartString}&end_date={timeEndString}&daily=temperature_2m_max";
-
+                    string apiUrl;
+                    DateTime today = DateTime.Now.AddDays(-3);
+                    string todayString = today.ToString("yyyy-MM-dd");
+                    MessageBox.Show(todayString);
+                    apiUrl = $"https://archive-api.open-meteo.com/v1/archive?latitude={city.Latitude}&longitude={city.Longitude}&start_date={timeStartString}&end_date={todayString}&daily=temperature_2m_max";
                     try
                     {
 
@@ -149,17 +153,22 @@ namespace PlotThatLine2
                         // Stocker les données dans la propriété de City
                         city.Time = times;
                         city.Temperature = temperatures;
-                        city.StoreDataAsync().Wait(1000);
-                        //var line = Graph1.Plot.Add.ScatterLine(city.Time, city.Temperature);
-                        //line.LegendText = city.Name;
-
+                        city.StoreDataAsync();
                     }
                     catch (HttpRequestException e)
                     {
                         Console.WriteLine($"Erreur lors de l'appel API : {e.Message}");
                     }
                 }
-                var line = Graph1.Plot.Add.ScatterLine(city.Time, city.Temperature);
+                DateTime[] timesToDisplay;
+                double[] temperaturesToDisplay;
+
+                // TODO #1 Ici cela ne prend pas les premières données du laps de temps dont on a besoin (il manque juste le 1jour)
+                timesToDisplay = city.Time.Where(t => t >= timeStart && t <= timeEnd).ToArray();
+                temperaturesToDisplay = city.Temperature.SkipLast(Array.IndexOf(city.Time, timesToDisplay.First()))
+                                                               .Take(timesToDisplay.Length)
+                                                               .ToArray();
+                var line = Graph1.Plot.Add.ScatterLine(timesToDisplay, temperaturesToDisplay);
                 line.LegendText = city.Name;
             }
             UpdateCheckedListBox();
@@ -216,13 +225,26 @@ namespace PlotThatLine2
 
         private void dateTimePickerDebut_ValueChanged(object sender, EventArgs e)
         {
-
-            Search_Click(sender, e);
+            if (dateTimePickerDebut.Value <= dateTimePickerFin.Value)
+            {
+                Search_Click(sender, e);
+            }
+            else
+            {
+                MessageBox.Show("valeur supp");
+            }
         }
 
         private void dateTimePickerFin_ValueChanged(object sender, EventArgs e)
         {
-            Search_Click(sender, e);
+            if (dateTimePickerDebut.Value <= dateTimePickerFin.Value)
+            {
+                Search_Click(sender, e);
+            }
+            else
+            {
+                MessageBox.Show("valeur supp");
+            }
         }
 
         private void Search_Click(object sender, EventArgs e)

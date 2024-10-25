@@ -71,7 +71,6 @@
             // 
             dateTimePickerDebut.Checked = false;
             dateTimePickerDebut.Location = new Point(12, 415);
-            dateTimePickerDebut.MaxDate = new DateTime(2024, 10, 24, 0, 0, 0, 0);
             dateTimePickerDebut.MinDate = new DateTime(1800, 1, 1, 0, 0, 0, 0);
             dateTimePickerDebut.Name = "dateTimePickerDebut";
             dateTimePickerDebut.Size = new Size(194, 23);

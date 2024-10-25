@@ -55,11 +55,6 @@ namespace PlotThatLine2
         {
             string filePath = $"../../../datasets/{this.Name}_weather_data.json";
 
-
-
-
-
-
             // Définition du nom du fichier JSON
             if (!File.Exists(filePath))
             {            
@@ -114,7 +109,6 @@ namespace PlotThatLine2
                 // Fusionner les données
                 if (existingCityData != null)
                 {
-                    MessageBox.Show("existingCityData est pas null");
                     // Fusionner les dates et températures
                     if (existingCityData.Time != null && existingCityData.Temperature != null && this.Time != null && this.Temperature !=null )
                     {
@@ -125,7 +119,7 @@ namespace PlotThatLine2
                             .Select(g => new
                             {
                                 Time = g.Key,
-                                Temperature = g.First().temp // Prioriser les nouvelles valeurs
+                                Temperature = g.Last().temp // Prioriser les nouvelles valeurs
                             })
                             .OrderBy(data => data.Time)
                             .ToList();

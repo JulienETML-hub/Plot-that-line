@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -40,12 +41,28 @@ namespace PlotThatLine2
         }
         private void latitudeOfCity_TextChanged(object sender, EventArgs e)
         {
-            this.latitude = Convert.ToDouble(latitudeOfCity.Text);
+            if (double.TryParse(latitudeOfCity.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double result))
+            {
+                this.latitude = result;
+            }
+            else
+            {
+                // Gérer le cas où la conversion échoue (par exemple, afficher un message)
+                MessageBox.Show("Veuillez entrer une latitude valide avec un point comme séparateur décimal.", "Erreur de saisie", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void longitudeOfCity_TextChanged(object sender, EventArgs e)
         {
-            this.longitude = Convert.ToDouble(longitudeOfCity.Text);
+            if (double.TryParse(longitudeOfCity.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double result))
+            {
+                this.longitude = result;
+            }
+            else
+            {
+                // Gérer le cas où la conversion échoue (par exemple, afficher un message)
+                MessageBox.Show("Veuillez entrer une longitude valide avec un point comme séparateur décimal.", "Erreur de saisie", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
         private void validate_Click(object sender, EventArgs e)
         {
