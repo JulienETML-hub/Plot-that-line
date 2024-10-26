@@ -15,10 +15,7 @@ namespace PlotThatLine2
     public partial class Form1 : Form
     {
         private static readonly HttpClient client = new HttpClient();
-
-        private List<City> _cities;  // Utilise un champ privé
-        
-        
+        private List<City> _cities; 
         public List<City> Cities
         {
             get => _cities;  // Retourne le champ privé
@@ -28,10 +25,16 @@ namespace PlotThatLine2
         public Form1()
         {
             InitializeComponent();
-            Cities = new List<City> {};  // Initialise la liste ici
+            Cities = new List<City> {};             
             LoadCitiesFromJsonWithoutNullablePropertiesAsync("../../../datasets/");
             Graph1.Refresh();
         }
+        /// <summary>
+        /// Méthode qui va créer des objets City pour chaque fichier json (contenant les données d'une city) dans un répértoire donnée
+        /// et qui les ajoute à la liste Cities
+        /// </summary>
+        /// <param Chemin où se trouve les fichiers="folderPath"></param>
+        /// <returns></returns>
         public async Task LoadCitiesFromJsonWithoutNullablePropertiesAsync(string folderPath)
         {
 
@@ -71,7 +74,11 @@ namespace PlotThatLine2
             }
 
         }
-
+        /// <summary>
+        /// Méthode pr rajouter ° à  la fin d'une température données
+        /// </summary>
+        /// <param name="temperature"></param>
+        /// <returns>string</returns>
         static string CustomFormatter(double temperature)
         {
             return $"{temperature}°";
@@ -81,6 +88,11 @@ namespace PlotThatLine2
         {
             LabelFormatter = CustomFormatter
         };
+        /// <summary>
+        /// Affichage du graphique
+        /// </summary>
+        /// <param name="timeStart"></param>
+        /// <param name="timeEnd"></param>
         private void GraphRefresh(DateTime timeStart, DateTime timeEnd)
         {
             Graph1.Reset();
@@ -90,6 +102,13 @@ namespace PlotThatLine2
             Graph1.Plot.Axes.DateTimeTicksBottom();
             Graph1.Plot.Title("Graphique des températures");
         }
+        /// <summary>
+        /// Méthode qui va charger les données de chaque villes présentes dans Cities (via données local ou API)
+        /// et qui va ensuite afficher les données sous forme de courbe, selon la requête (date de début et fin)
+        /// </summary>
+        /// <param name="citiesSelected"></param>
+        /// <param name="timeStart"></param>
+        /// <param name="timeEnd"></param>
         private async void LoadData(List<City> citiesSelected, DateTime timeStart, DateTime timeEnd)
         {
             GraphRefresh(timeStart, timeEnd);
@@ -153,6 +172,7 @@ namespace PlotThatLine2
                         // Stocker les données dans la propriété de City
                         city.Time = times;
                         city.Temperature = temperatures;
+                        // Mise à jour du fichier json local (correspondant à la city)
                         city.StoreDataAsync();
                     }
                     catch (HttpRequestException e)
@@ -168,6 +188,7 @@ namespace PlotThatLine2
                 temperaturesToDisplay = city.Temperature.SkipLast(Array.IndexOf(city.Time, timesToDisplay.First()))
                                                                .Take(timesToDisplay.Length)
                                                                .ToArray();
+                // Affichage de la courbe 
                 var line = Graph1.Plot.Add.ScatterLine(timesToDisplay, temperaturesToDisplay);
                 line.LegendText = city.Name;
             }
@@ -178,7 +199,9 @@ namespace PlotThatLine2
             // Mettre à jour la CheckedListBox
 
         }
-
+        /// <summary>
+        /// Vérifie pour chaque ville s'il est présente dans la checkBoxList, s'il ne l'est pas elle l'ajoute
+        /// </summary>
         private void UpdateCheckedListBox()
         {
             foreach (City city in Cities)
@@ -190,20 +213,31 @@ namespace PlotThatLine2
             }
            
         }
-
+        /// <summary>
+        /// En cas d'interaction avec la checkBoxList, appel la méthode "Search_Click"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             Search_Click(sender, e);
 
         }
-
+        /// <summary>
+        /// Ouvre un nouveau formulaire "addCity" permettant d'ajouter une ville à la liste
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addCityB_Click(object sender, EventArgs e)
         {
             addCity newFormAddCity = new addCity();
             newFormAddCity.CityAdded += AddCityToList;
             newFormAddCity.Show();
         }
-
+        /// <summary>
+        /// Ajoute la city passer en paramètre à la liste Cities
+        /// </summary>
+        /// <param name="newCity"></param>
         private void AddCityToList(City newCity)
         {
             Cities.Add(newCity);  // Ajoute la nouvelle ville à la liste
@@ -211,6 +245,9 @@ namespace PlotThatLine2
             MessageBox.Show($"La ville {newCity.Name} a été ajoutée !");
             refresh();
         }
+        /// <summary>
+        /// Rafraichie la liste des villes, et crée un json file simple pour chacune (name, country, latitude, longitude)
+        /// </summary>
         private void refresh()
         {
             UpdateCheckedListBox();  // Rafraîchit la liste des villes affichées
@@ -219,10 +256,7 @@ namespace PlotThatLine2
                 city.CreateJsonFileAsync();  // Appelle la méthode d'exportation JSON
             }
         }
-        private void refresh_Click(object sender, EventArgs e)
-        {
-        }
-
+        /// En cas d'interaction avec le dateTimePicker, appel la méthode "Search_Click"
         private void dateTimePickerDebut_ValueChanged(object sender, EventArgs e)
         {
             if (dateTimePickerDebut.Value <= dateTimePickerFin.Value)
@@ -234,7 +268,7 @@ namespace PlotThatLine2
                 MessageBox.Show("valeur supp");
             }
         }
-
+        /// En cas d'interaction avec le dateTimePicker, appel la méthode "Search_Click"
         private void dateTimePickerFin_ValueChanged(object sender, EventArgs e)
         {
             if (dateTimePickerDebut.Value <= dateTimePickerFin.Value)
@@ -246,7 +280,12 @@ namespace PlotThatLine2
                 MessageBox.Show("valeur supp");
             }
         }
-
+        /// <summary>
+        /// Crée une liste avec les villes sélectionner dans la checkBoxList et appel la méthode loadDate avec cette 
+        /// liste ainsi qu'avec les dates choisis
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Search_Click(object sender, EventArgs e)
         {
             refresh();

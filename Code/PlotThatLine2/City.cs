@@ -50,7 +50,10 @@ namespace PlotThatLine2
             Temperature = null;
         }
         public City() { }
-
+        /// <summary>
+        /// Méthode qui va créer un fichier json avec les informations de base (name, country, latitude, longitude) 
+        /// </summary>
+        /// <returns></returns>
         public async Task CreateJsonFileAsync()
         {
             string filePath = $"../../../datasets/{this.Name}_weather_data.json";
@@ -77,20 +80,20 @@ namespace PlotThatLine2
                 Console.WriteLine($"Le fichier JSON '{fileName}' a été créé avec succès !");
             }
         }
+        /// <summary>
+        /// Méthode qui va mettre à jour les données du fichier json grâce aux données de l'objet
+        /// </summary>
+        /// <returns></returns>
         public async Task StoreDataAsync()
         {
             try
             {
                 // Création du nom de fichier basé sur la propriété Name de la ville
                 string filePath = $"../../../datasets/{this.Name}_weather_data.json";
-
                 City existingCityData = null;
-
                 // Vérifier si le fichier existe
                 if (File.Exists(filePath))
                 {
-                    
-
                     try
                     {
                         // Lire les données existantes du fichier
@@ -127,13 +130,6 @@ namespace PlotThatLine2
                         this.Time = mergedData.Select(d => d.Time).ToArray();
                         this.Temperature = mergedData.Select(d => d.Temperature).ToArray();
                     }
-                    else
-                    {
-
-                    }
-                    // Mettre à jour les propriétés Time et Temperature de la ville
-
-                    
                 }
                 else
                 {

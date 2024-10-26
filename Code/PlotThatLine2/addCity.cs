@@ -20,21 +20,14 @@ namespace PlotThatLine2
         public string country;
         public double latitude;
         public double longitude;
-
-
-
         public addCity()
         {
             InitializeComponent();
         }
-
         private void nameOfCity_TextChanged(object sender, EventArgs e)
         {
             this.name = nameOfCity.Text;
         }
-
-
-
         private void CountryOfCity_TextChanged(object sender, EventArgs e)
         {
             this.country = CountryOfCity.Text;
@@ -51,7 +44,6 @@ namespace PlotThatLine2
                 MessageBox.Show("Veuillez entrer une latitude valide avec un point comme séparateur décimal.", "Erreur de saisie", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
         private void longitudeOfCity_TextChanged(object sender, EventArgs e)
         {
             if (double.TryParse(longitudeOfCity.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double result))
@@ -73,11 +65,6 @@ namespace PlotThatLine2
         {
             CityAdded?.Invoke(city);
             this.Close();
-        }
-
-        private void addCity_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
