@@ -34,9 +34,18 @@ namespace PlotThatLine2
         }
         private void latitudeOfCity_TextChanged(object sender, EventArgs e)
         {
+            latitudeOfCity.Text.Replace(",", ".");
             if (double.TryParse(latitudeOfCity.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double result))
             {
-                this.latitude = result;
+                if (result >= -90 && result <= 90)
+                {
+                    this.latitude = result;
+                }
+                else
+                {
+                    // Gérer le cas où la conversion échoue (par exemple, afficher un message)
+                    MessageBox.Show("Il n'existe pas de latitude en dehors de -90 à 90");
+                }
             }
             else
             {
@@ -46,9 +55,20 @@ namespace PlotThatLine2
         }
         private void longitudeOfCity_TextChanged(object sender, EventArgs e)
         {
+            longitudeOfCity.Text.Replace(",", ".");
+
             if (double.TryParse(longitudeOfCity.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double result))
             {
-                this.longitude = result;
+                if (result >= -180 && result <= 180)
+                {
+                    this.longitude = result;
+                }
+                else
+                {
+                    // Gérer le cas où la conversion échoue (par exemple, afficher un message)
+                    MessageBox.Show("Il n'existe pas de longitude en dehors de -180 à 180");
+                }
+
             }
             else
             {

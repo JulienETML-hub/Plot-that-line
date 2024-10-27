@@ -94,7 +94,6 @@
             Controls.Add(nameOfCity);
             Name = "addCity";
             Text = "addCity";
-            Load += addCity_Load;
             ResumeLayout(false);
             PerformLayout();
         }
