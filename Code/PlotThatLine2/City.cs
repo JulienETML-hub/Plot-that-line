@@ -142,7 +142,6 @@ namespace PlotThatLine2
                 // Enregistrer le JSON fusionné dans un fichier
                 await File.WriteAllTextAsync(filePath, jsonString);
 
-                MessageBox.Show($"Les données de la ville {this.Name} ont été mises à jour avec succès.");
             }
             catch (Exception ex)
             {
