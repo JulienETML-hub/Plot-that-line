@@ -50,6 +50,16 @@ namespace PlotThatLine2
             Temperature = null;
         }
         public City() { }
+        public async void changeCountry(string country)
+        {
+            this.Country = country;
+            this.StoreDataAsync();
+        }
+        public async void changeName(string name)
+        {
+            this.Name = name;
+            this.StoreDataAsync();
+        }
         /// <summary>
         /// Méthode qui va créer un fichier json avec les informations de base (name, country, latitude, longitude) 
         /// </summary>
@@ -102,12 +112,12 @@ namespace PlotThatLine2
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Erreur lors de la lecture du fichier existant pour {this.Name} : {ex.Message}");
+                        Console.WriteLine($"Erreur lors de la lecture du fichier existant pour {this.Name} : {ex.Message}");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Il n'y a pas de fichier à filePath");
+                    Console.WriteLine("Il n'y a pas de fichier à filePath");
                 }
                 // Fusionner les données
                 if (existingCityData != null)
@@ -133,7 +143,7 @@ namespace PlotThatLine2
                 }
                 else
                 {
-                    MessageBox.Show("existingCityData est null");
+                    Console.WriteLine("existingCityData est null");
                 }
                 // Sérialiser l'objet City en JSON
                 var options = new JsonSerializerOptions { WriteIndented = true };
@@ -145,7 +155,7 @@ namespace PlotThatLine2
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erreur lors de l'enregistrement des données de la ville {this.Name} : {ex.Message} {this.Temperature.Last()}");
+                Console.WriteLine($"Erreur lors de l'enregistrement des données de la ville {this.Name} : {ex.Message} {this.Temperature.Last()}");
             }
         }
     }
