@@ -14,6 +14,11 @@ namespace PlotThatLine2
 {
     public partial class Form1 : Form
     {
+        public CheckedListBox GetCheckedListBox1()
+        {
+            return checkedListBox1;
+        }
+
         private static readonly HttpClient client = new HttpClient();
         private List<City> _cities; 
         public List<City> Cities
@@ -202,7 +207,7 @@ namespace PlotThatLine2
         /// <summary>
         /// Vérifie pour chaque ville s'il est présente dans la checkBoxList, s'il ne l'est pas elle l'ajoute
         /// </summary>
-        private void UpdateCheckedListBox()
+        public void UpdateCheckedListBox()
         {
             foreach (City city in Cities)
             {
