@@ -146,7 +146,7 @@ namespace PlotThatLine2
                     catch (Exception ex)
                     {
                         dataIncomplete = true;
-                        MessageBox.Show($"Erreur lors de la lecture des données locales pour {city.Name}: {ex.Message}");
+                        Console.WriteLine($"Erreur lors de la lecture des données locales pour {city.Name}: {ex.Message}");
                     }
                 }
                 if (dataIncomplete == true)
@@ -154,7 +154,7 @@ namespace PlotThatLine2
                     string apiUrl;
                     DateTime today = DateTime.Now.AddDays(-3);
                     string todayString = today.ToString("yyyy-MM-dd");
-                    MessageBox.Show(todayString);
+
                     apiUrl = $"https://archive-api.open-meteo.com/v1/archive?latitude={city.Latitude}&longitude={city.Longitude}&start_date={timeStartString}&end_date={todayString}&daily=temperature_2m_max";
                     try
                     {
