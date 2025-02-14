@@ -25,7 +25,7 @@ namespace PlotThatLine2
         public double[]? Temperature { get => temperature; set => temperature = value; }
 
         /// <summary>
-        /// Constructeur test
+        /// Constructeur test 2
         /// </summary>
         /// <param name="name"></param>
         /// <param name="country"></param>
